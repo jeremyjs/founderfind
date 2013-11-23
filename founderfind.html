@@ -16,10 +16,10 @@
 						    		// .params({'start': 10, 'count': 5})
 								    .result(displayMyProfile)
 						    		.error(displayMyProfileError);
-			IN.API.Connections('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
-						    		.params({'start': 0, 'count': 25})
-								    .result(displayProfiles)
-						    		.error(displayProfilesErrors);
+			// IN.API.Connections('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
+			// 			    		.params({'start': 0, 'count': 25})
+			// 					    .result(displayProfiles)
+			// 			    		.error(displayProfilesErrors);
 		}
 
 		function displayMyProfile(profile){
@@ -50,22 +50,25 @@
 		}
 
 		function displayProfiles(profiles) {
-		    members = profiles.values;
-		    console.log("Connections: " + profiles);
+		    members = People.find({});
+		    console.log(members);
 		    profilesDiv = document.getElementById('profiles');
-		    for (var i=0; i < members.length; i++) {
+		    members.forEach(function(member){
 			    profilesDiv.innerHTML = profilesDiv.innerHTML +
-			    	'<div class="media" id="connection' + members[i].id + '"><a class="pull-left" href="#"><img class="media-object" src="' + members[i].pictureUrl +
+			    	'<div class="media" id="connection' + member.memberId + '"><a class="pull-left" href="#"><img class="media-object" src="' + member.pictureUrl +
 			    	'"/></a><div class="media-body"><h4 class="media-heading">' +
-			    	members[i].firstName + ' ' + members[i].lastName + '</h4><p><i>' +
-			    	members[i].industry + '</i><br/><div id="hackerScore"></div><br/>';
-			    skills = members[i].skills;
+			    	member.name + '</h4><p><i>' +
+			    	member.industry + '</i><br/><div id="hackerScore">' +
+			    	member.hackerScore + '</div><div id="hipsterScore">' +
+			    	member.hipsterScore + '</div><div id="hustlerScore">' +
+			    	member.hustlerScore + '</div><br/>';
+			    skills = member.skills;
 			    console.log(skills);
 			    // for(var j=0; j < skills.length; j++){
 			    // 	// profilesDiv.innerHTML = profilesDiv.innerHTML + skills[j].skill.name + '<br/>';
 			    // }
 			    profilesDiv.innerHTML = profilesDiv.innerHTML + '</p></div></div>';
-			}
+		    });
 		}
 
 		function displayProfilesErrors(error) {
@@ -94,21 +97,32 @@
 	          hustlerScore = hustlerScore + 1;
 	        }
 	      }
-	      hackerScore = (allSkills.length - hackerScore)/12;
-	      hipsterScore = (allSkills.length - hipsterScore)/12;
-	      hustlerScore = (allSkills.length - hustlerScore)/12;
+	      hackerScore = (allSkills.length - hackerScore)*100/12;
+	      hipsterScore = (allSkills.length - hipsterScore)*100/12;
+	      hustlerScore = (allSkills.length - hustlerScore)*100/12;
 
 	      //New Code Here
-	      People.remove({memberId: profile.id});
-	      People.insert({memberId: profile.id, name: profile.firstName + ' ' + profile.lastName, skills: allSkills, hackerScore: hackerScore, hipsterScore: hipsterScore, hustlerScore: hustlerScore, industry: profile.industry, pictureUrl: profile.pictureUrl});
-
+	      // People.remove({memberId: profile.id});
+	      p = {
+	      	memberId: profile.id,
+	      	name: profile.firstName + ' ' + profile.lastName,
+	      	skills: allSkills,
+	      	hackerScore: hackerScore,
+	      	hipsterScore: hipsterScore,
+	      	hustlerScore: hustlerScore,
+	      	industry: profile.industry,
+	      	pictureUrl: profile.pictureUrl
+	      }
+	      People.insert(p);
+      
+	      // People.insert(profile);
 
 	      //document.getElementById('hackerScore').innerHTML = hackerScore;
 	      //document.getElementById('hipsterScore').innerHTML = hipsterScore;
 	      //document.getElementById('hustlerScore').innerHTML = hustlerScore;
-	      document.querySelector('#hackerScore .bar').style.width=hackerScore*100+'%';
-	      document.querySelector('#hipsterScore .bar').style.width=hipsterScore*100+'%';
-	      document.querySelector('#hustlerScore .bar').style.width=hustlerScore*100+'%';
+	      document.querySelector('#hackerScore .bar').style.width=hackerScore + '%';
+	      document.querySelector('#hipsterScore .bar').style.width=hipsterScore + '%';
+	      document.querySelector('#hustlerScore .bar').style.width=hustlerScore + '%';
 	    }
 	</script>
 </head>
@@ -116,6 +130,7 @@
 <body>
 	<div class="container">
 		{{> hello}}
+		{{> people}}
 	</div>
 </body>
 
@@ -125,37 +140,36 @@
 	</header>
 	<div class="row">
 		<div class="span4">
-		<h2 class="leftHead">My Scores</h2>
-		<div class='stats'>
-			<h2>Hacker Score</h2>
-			<div id="hackerScore">
-				
-				<div class="progress progress-info progress-striped active">
-  					<div class="bar" style="width: 0%">
-  					</div>
-				</div>
-
-			</div>
-			<h2>Hipster Score</h2>
-			<div id="hipsterScore">
-				
-					<div class="progress progress-warning progress-striped active">
-						<div class="bar" style="width: 0%">
-  						</div>
+			<h2 class="leftHead">My Scores</h2>
+			<div class='stats'>
+				<h2>Hacker Score</h2>
+				<div id="hackerScore">
+					
+					<div class="progress progress-info progress-striped active">
+	  					<div class="bar" style="width: 0%">
+	  					</div>
 					</div>
 
-			</div>
-			<h2>Hustler Score</h2>
-			<div id="hustlerScore">
-				
-				<div class="progress progress-success progress-striped active">
-  					<div class="bar" style="width: 0%">
-  					</div>
 				</div>
+				<h2>Hipster Score</h2>
+				<div id="hipsterScore">
+					
+						<div class="progress progress-warning progress-striped active">
+							<div class="bar" style="width: 0%">
+	  						</div>
+						</div>
 
+				</div>
+				<h2>Hustler Score</h2>
+				<div id="hustlerScore">
+					
+					<div class="progress progress-success progress-striped active">
+	  					<div class="bar" style="width: 0%">
+	  					</div>
+					</div>
+
+				</div>
 			</div>
-</div>
-			
 
 			<h2 class="leftHead">My Profile</h2>
 			<div id="myProfile"></div>
@@ -173,4 +187,49 @@
 			<div id="profiles"></div>
 		</div>
 	</div>
+</template>
+
+<template name="people">
+	{{#each people}}
+		<div class="media" id="person{{memberId}}">
+			<a class="pull-left" href="#">
+				<img class="media-object" src="{{pictureUrl}}"/>
+			</a>
+			<div class="media-body">
+				<h4 class="media-heading"> {{name}} </h4>
+				<p>
+					<i> {{industry}} </i><br/>
+					<div class='stats'>
+						<h2>Hacker Score</h2>
+						<div id="hackerScore">
+							
+							<div class="progress progress-info progress-striped active">
+			  					<div class="bar" style="width: {{hackerScore}}%">
+			  					</div>
+							</div>
+
+						</div>
+						<h2>Hipster Score</h2>
+						<div id="hipsterScore">
+							
+								<div class="progress progress-warning progress-striped active">
+									<div class="bar" style="width: {{hipsterScore}}%">
+			  						</div>
+								</div>
+
+						</div>
+						<h2>Hustler Score</h2>
+						<div id="hustlerScore">
+							
+							<div class="progress progress-success progress-striped active">
+			  					<div class="bar" style="width: {{hustlerScore}}%">
+			  					</div>
+							</div>
+
+						</div>
+					</div>
+				</p>
+			</div>
+		</div>
+	{{/each}}
 </template>

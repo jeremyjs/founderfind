@@ -7,11 +7,9 @@ People = new Meteor.Collection("People");
 if (Meteor.isClient) {
   allSkills = [];
 
-  Template.hello.profile = function () {
-    // var html = 
-
-    return "";
-  };
+  // addPerson = function (profile) {
+     
+  // };
 
   Template.hello.events({
 
@@ -32,36 +30,37 @@ if (Meteor.isClient) {
   });
 
   Template.hello.helpers({
-    
-   /* score: function(){
-      hackerScore = 0;
-      hipsterScore = 0;
-      hustlerScore = 0;
-      hackerSkills = ["Python"];
-      hipsterSkills = [""];
-      hustlerSkills = [""];
-      for(var i in allSkills){
-        console.log(i + ': ' + allSkills[i]);
-        if($.inArray(hackerSkills, allSkills[i].name)){
-          hackerScore++;
-        }
-        if($.inArray(hipsterSkills, allSkills[i].name)){
-          hipsterScore++;
-        }
-        if($.inArray(hustlerSkills, allSkills[i].name)){
-          hustlerScore++;
-        }
-      }
-
-      return [hackerScore, hipsterScore, hustlerScore];
-    },*/
     skills: function(){
       return Skills.find();
     }
   });
+
+  Template.people.helpers({
+    people: function(){
+      return People.find();
+    }
+  });
+
+  // Meteor.subscribe("People");
 }
 
 if (Meteor.isServer) {
+
+  // server: publish the rooms collection, minus secret info.
+  // Meteor.publish("People", function () {
+  //   return People.find({}, {fields: {}});
+  // });
+  People.allow({
+    insert: function (profile) {
+      People.remove(profile);
+      People.insert(profile);
+      return true;
+    },
+    remove: function () {
+      return true;
+    }
+  });
+
   Meteor.startup(function () {
     // code to run on server at startup
     allSkills = [];
