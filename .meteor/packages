@@ -8,3 +8,7 @@ autopublish
 insecure
 preserve-inputs
 bootstrap
+accounts-base
+accounts-ui
+linkedin
+accounts-linkedin
