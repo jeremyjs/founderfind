@@ -1,3 +1,6 @@
+// Create the collection for LinkedIn connections
+Connections = new Meteor.Collection("connections");
+
 if (Meteor.isClient) {
   Template.hello.greeting = function () {
     return "Welcome to founderfind.";
