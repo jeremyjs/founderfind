@@ -12,12 +12,12 @@
 		}
 
 		function onLinkedInAuth() {
-			IN.API.Profile('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
+			IN.API.Profile('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills', 'id')
 						    		// .params({'start': 10, 'count': 5})
 								    .result(displayMyProfile)
 						    		.error(displayMyProfileError);
 			IN.API.Connections('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
-						    		// .params({'start': 10, 'count': 5})
+						    		.params({'start': 0, 'count': 25})
 								    .result(displayProfiles)
 						    		.error(displayProfilesErrors);
 		}
@@ -37,10 +37,10 @@
 		    for(var j=0; j < skills.length; j++){
 		    	allSkills[allSkills.length] = skills[j].skill.name;
 		    	// Skills.insert({name: skills[j].skill.name});
-		    	myProfileDiv.innerHTML = myProfileDiv.innerHTML + skills[j].skill.name + '<br/>';
+		    	myProfileDiv.innerHTML = myProfileDiv.innerHTML + skills[j].skill.name + ', ';
 		    }
 		    myProfileDiv.innerHTML = myProfileDiv.innerHTML + '</p></div></div>';
-		    hackerScore();
+		    hackerScore(profile);
 		}
 
 		function displayMyProfileError(error) {
@@ -74,14 +74,14 @@
 		  console.log(error);
 		}
 		
-		function hackerScore(){
+		function hackerScore(profile){
 	      // console.log(allSkills);
 	      hackerScore = 0;
 	      hipsterScore = 0;
 	      hustlerScore = 0;
-	      hackerSkills = ["Python", "jQuery", "Javascript", "Web Development", "jQuery Mobile"];
+	      hackerSkills = ["Python", "jQuery", "Javascript", "Web Development", "jQuery Mobile", "Rails", "Ruby on Rails", "Ruby-On-Rails", "C#", "C++", "Objective-C", "Computer Science", "Computer Engineering", "Big Data"];
 	      hipsterSkills = ["Photoshop", "Adobe Fireworks", "Illustrator", "CSS3", "CSS", "HTML", "jQuery", "Graphic Design", "Web Design", "jQuery Mobile"];
-	      hustlerSkills = ["Business Development", "Market Research", "Marketing", "New Business Development", "Entrepreneurship"];
+	      hustlerSkills = ["Business Development", "Market Research", "Marketing", "New Business Development", "Entrepreneurship", "Leadership", "Negotiation", "Public Relations", "Public Speaking", "Communication", "Partnerships", "Customer Acquisition", "Startups", "Start-ups", "Blogging", "Social Media Marketing", "Business", "Business Analysis"];
 	      for(var i in allSkills){
 	        console.log(i + ': ' + allSkills[i]);
 	        if(($.inArray(allSkills[i], hackerSkills)) === -1){
@@ -94,12 +94,21 @@
 	          hustlerScore = hustlerScore + 1;
 	        }
 	      }
-	      hackerScore = (allSkills.length - hackerScore)/allSkills.length;
-	      hipsterScore = (allSkills.length - hipsterScore)/allSkills.length;
-	      hustlerScore = (allSkills.length - hustlerScore)/allSkills.length;
-	      document.getElementById('hackerScore').innerHTML = hackerScore;
-	      document.getElementById('hipsterScore').innerHTML = hipsterScore;
-	      document.getElementById('hustlerScore').innerHTML = hustlerScore;
+	      hackerScore = (allSkills.length - hackerScore)/12;
+	      hipsterScore = (allSkills.length - hipsterScore)/12;
+	      hustlerScore = (allSkills.length - hustlerScore)/12;
+
+	      //New Code Here
+	      People.remove({memberId: profile.id});
+	      People.insert({memberId: profile.id, name: profile.firstName + ' ' + profile.lastName, skills: allSkills, hackerScore: hackerScore, hipsterScore: hipsterScore, hustlerScore: hustlerScore, industry: profile.industry, pictureUrl: profile.pictureUrl});
+
+
+	      //document.getElementById('hackerScore').innerHTML = hackerScore;
+	      //document.getElementById('hipsterScore').innerHTML = hipsterScore;
+	      //document.getElementById('hustlerScore').innerHTML = hustlerScore;
+	      document.querySelector('#hackerScore .bar').style.width=hackerScore*100+'%';
+	      document.querySelector('#hipsterScore .bar').style.width=hipsterScore*100+'%';
+	      document.querySelector('#hustlerScore .bar').style.width=hustlerScore*100+'%';
 	    }
 	</script>
 </head>
@@ -111,12 +120,44 @@
 </body>
 
 <template name="hello">
+<header>
 	<h1>FounderFind</h1>
+	</header>
 	<div class="row">
 		<div class="span4">
-			<div id="hackerScore"></div>
-			<div id="hipsterScore"></div>
-			<div id="hustlerScore"></div>
+		<h2 class="leftHead">My Scores</h2>
+		<div class='stats'>
+			<h2>Hacker Score</h2>
+			<div id="hackerScore">
+				
+				<div class="progress progress-info progress-striped active">
+  					<div class="bar" style="width: 0%">
+  					</div>
+				</div>
+
+			</div>
+			<h2>Hipster Score</h2>
+			<div id="hipsterScore">
+				
+					<div class="progress progress-warning progress-striped active">
+						<div class="bar" style="width: 0%">
+  						</div>
+					</div>
+
+			</div>
+			<h2>Hustler Score</h2>
+			<div id="hustlerScore">
+				
+				<div class="progress progress-success progress-striped active">
+  					<div class="bar" style="width: 0%">
+  					</div>
+				</div>
+
+			</div>
+</div>
+			
+
+			<h2 class="leftHead">My Profile</h2>
 			<div id="myProfile"></div>
 			<div id="skills">
 				{{#each skills}}

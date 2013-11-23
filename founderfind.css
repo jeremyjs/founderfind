@@ -1,1 +1,49 @@
 /* CSS declarations go here */
+html, body {
+	width: 100%;
+	font-size: 16px;
+}
+
+header {
+	width: 100%;
+	padding: 1em 1.5em .5em 1.5em;
+	background-color: #0c0c0c;
+	color: #e6ebc4;
+	margin-top: -1em;
+	margin-bottom: 1em;
+	border-radius: 0 0 .5em .5em;
+}
+
+img {
+	border-radius: 1em;
+	box-shadow: .15em .15em .3em #555555;
+}
+
+.media {
+	background-color: #e6ebc4;
+	padding: .5em;
+	border-radius: 1em;
+	color: #0c0c0c;
+	margin-bottom: 1em;
+	border-style: solid;
+	border-color: #0c0c0c;
+	border-width: .1em;
+}
+
+.stats {
+	background-color: #99dcdd;
+	border-radius: 1em;
+	padding: 1em;
+	border-style: solid;
+	border-color: #0c0c0c;
+	border-width: .1em;
+}
+
+.stats h2 {
+	color: #e6ebc4;
+	text-shadow: .05em .05em .15em #0c0c0c;
+}
+
+.leftHead {
+	text-align: center;
+}

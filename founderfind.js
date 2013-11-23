@@ -1,9 +1,12 @@
 // Create the collection for LinkedIn connections
 Connections = new Meteor.Collection("Connections");
 Skills = new Meteor.Collection("Skills");
-allSkills = [];
+People = new Meteor.Collection("People");
+
 
 if (Meteor.isClient) {
+  allSkills = [];
+
   Template.hello.profile = function () {
     // var html = 
 
@@ -30,7 +33,7 @@ if (Meteor.isClient) {
 
   Template.hello.helpers({
     
-    score: function(){
+   /* score: function(){
       hackerScore = 0;
       hipsterScore = 0;
       hustlerScore = 0;
@@ -51,7 +54,7 @@ if (Meteor.isClient) {
       }
 
       return [hackerScore, hipsterScore, hustlerScore];
-    },
+    },*/
     skills: function(){
       return Skills.find();
     }
