@@ -1,13 +1,135 @@
 <head>
-  <title>founderfind</title>
+	<title>founderfind</title>
+	<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+		api_key: 774knwz4aoj84b
+		onLoad: onLinkedInLoad
+		authorize: true
+	</script>
+	<script type="text/javascript">
+
+		function onLinkedInLoad() {
+	    	IN.Event.on(IN, 'auth', onLinkedInAuth);
+		}
+
+		function onLinkedInAuth() {
+			IN.API.Profile('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
+						    		// .params({'start': 10, 'count': 5})
+								    .result(displayMyProfile)
+						    		.error(displayMyProfileError);
+			IN.API.Connections('me').fields('firstName', 'lastName', 'industry', 'pictureUrl', 'skills')
+						    		// .params({'start': 10, 'count': 5})
+								    .result(displayProfiles)
+						    		.error(displayProfilesErrors);
+		}
+
+		function displayMyProfile(profile){
+			profile = profile.values[0];
+		    console.log("My Profile: " + profile);
+		    myProfileDiv = document.getElementById('myProfile');
+		    myProfileDiv.innerHTML = myProfileDiv.innerHTML +
+		    	'<div class="media"><a class="pull-left" href="#"><img class="media-object" src="' +
+		    	profile.pictureUrl +
+		    	'"/></a><div class="media-body"><h4 class="media-heading">' +
+		    	profile.firstName + ' ' + profile.lastName + '</h4><p><i>' +
+		    	profile.industry + '</i><br/>';
+		    skills = profile.skills.values;
+		    console.log(skills);
+		    for(var j=0; j < skills.length; j++){
+		    	allSkills[allSkills.length] = skills[j].skill.name;
+		    	// Skills.insert({name: skills[j].skill.name});
+		    	myProfileDiv.innerHTML = myProfileDiv.innerHTML + skills[j].skill.name + '<br/>';
+		    }
+		    myProfileDiv.innerHTML = myProfileDiv.innerHTML + '</p></div></div>';
+		    hackerScore();
+		}
+
+		function displayMyProfileError(error) {
+		  myProfileDiv = document.getElementById('myProfile');
+		  myProfileDiv.innerHTML = '<p>Error fetching profile</p>';
+		  console.log(error);
+		}
+
+		function displayProfiles(profiles) {
+		    members = profiles.values;
+		    console.log("Connections: " + profiles);
+		    profilesDiv = document.getElementById('profiles');
+		    for (var i=0; i < members.length; i++) {
+			    profilesDiv.innerHTML = profilesDiv.innerHTML +
+			    	'<div class="media" id="connection' + members[i].id + '"><a class="pull-left" href="#"><img class="media-object" src="' + members[i].pictureUrl +
+			    	'"/></a><div class="media-body"><h4 class="media-heading">' +
+			    	members[i].firstName + ' ' + members[i].lastName + '</h4><p><i>' +
+			    	members[i].industry + '</i><br/><div id="hackerScore"></div><br/>';
+			    skills = members[i].skills;
+			    console.log(skills);
+			    // for(var j=0; j < skills.length; j++){
+			    // 	// profilesDiv.innerHTML = profilesDiv.innerHTML + skills[j].skill.name + '<br/>';
+			    // }
+			    profilesDiv.innerHTML = profilesDiv.innerHTML + '</p></div></div>';
+			}
+		}
+
+		function displayProfilesErrors(error) {
+		  profilesDiv = document.getElementById('profiles');
+		  profilesDiv.innerHTML = '<p>Error fetching profiles</p>';
+		  console.log(error);
+		}
+		
+		function hackerScore(){
+	      // console.log(allSkills);
+	      hackerScore = 0;
+	      hipsterScore = 0;
+	      hustlerScore = 0;
+	      hackerSkills = ["Python", "jQuery", "Javascript", "Web Development", "jQuery Mobile"];
+	      hipsterSkills = ["Photoshop", "Adobe Fireworks", "Illustrator", "CSS3", "CSS", "HTML", "jQuery", "Graphic Design", "Web Design", "jQuery Mobile"];
+	      hustlerSkills = ["Business Development", "Market Research", "Marketing", "New Business Development", "Entrepreneurship"];
+	      for(var i in allSkills){
+	        console.log(i + ': ' + allSkills[i]);
+	        if(($.inArray(allSkills[i], hackerSkills)) === -1){
+	          hackerScore = hackerScore + 1;
+	        }
+	        if(($.inArray(allSkills[i], hipsterSkills)) === -1){
+	          hipsterScore = hipsterScore + 1;
+	        }
+	        if(($.inArray(allSkills[i], hustlerSkills)) === -1){
+	          hustlerScore = hustlerScore + 1;
+	        }
+	      }
+	      hackerScore = (allSkills.length - hackerScore)/allSkills.length;
+	      hipsterScore = (allSkills.length - hipsterScore)/allSkills.length;
+	      hustlerScore = (allSkills.length - hustlerScore)/allSkills.length;
+	      document.getElementById('hackerScore').innerHTML = hackerScore;
+	      document.getElementById('hipsterScore').innerHTML = hipsterScore;
+	      document.getElementById('hustlerScore').innerHTML = hustlerScore;
+	    }
+	</script>
 </head>
 
 <body>
-  {{> hello}}
+	<div class="container">
+		{{> hello}}
+	</div>
 </body>
 
 <template name="hello">
-  <h1>Hello World!</h1>
-  {{greeting}}
-  <input type="button" value="Click" />
+	<h1>FounderFind</h1>
+	<div class="row">
+		<div class="span4">
+			<div id="hackerScore"></div>
+			<div id="hipsterScore"></div>
+			<div id="hustlerScore"></div>
+			<div id="myProfile"></div>
+			<div id="skills">
+				{{#each skills}}
+					{{name}}<br/>
+				{{/each}}
+			</div>
+			<br/>
+			<script type="in/Login">
+				<?js= firstName ?> <?js= lastName ?> is logged in to FounderFind.
+			</script>
+		</div>
+		<div class="span8">
+			<div id="profiles"></div>
+		</div>
+	</div>
 </template>
