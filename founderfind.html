@@ -138,7 +138,7 @@
 <header>
 	<h1>FounderFind</h1>
 	</header>
-	<div class="row">
+	<div class="row left">
 		<div class="span4">
 			<h2 class="leftHead">My Scores</h2>
 			<div class='stats'>
@@ -183,15 +183,13 @@
 				<?js= firstName ?> <?js= lastName ?> is logged in to FounderFind.
 			</script>
 		</div>
-		<div class="span8">
-			<div id="profiles"></div>
-		</div>
+		
 	</div>
 </template>
 
 <template name="people">
 	{{#each people}}
-		<div class="media" id="person{{memberId}}">
+		<div class="media right" id="person{{memberId}}">
 			<a class="pull-left" href="#">
 				<img class="media-object" src="{{pictureUrl}}"/>
 			</a>
@@ -200,7 +198,7 @@
 				<p>
 					<i> {{industry}} </i><br/>
 					<div class='stats'>
-						<h2>Hacker Score</h2>
+						<h4>Hacker Score</h4>
 						<div id="hackerScore">
 							
 							<div class="progress progress-info progress-striped active">
@@ -209,7 +207,7 @@
 							</div>
 
 						</div>
-						<h2>Hipster Score</h2>
+						<h4>Hipster Score</h4>
 						<div id="hipsterScore">
 							
 								<div class="progress progress-warning progress-striped active">
@@ -218,7 +216,7 @@
 								</div>
 
 						</div>
-						<h2>Hustler Score</h2>
+						<h4>Hustler Score</h4>
 						<div id="hustlerScore">
 							
 							<div class="progress progress-success progress-striped active">

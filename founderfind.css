@@ -39,11 +39,28 @@ img {
 	border-width: .1em;
 }
 
-.stats h2 {
+.stats h2, .stats h4 {
 	color: #e6ebc4;
 	text-shadow: .05em .05em .15em #0c0c0c;
 }
 
 .leftHead {
 	text-align: center;
+}
+
+.media {
+	float: right;
+	width: 52%;
+}
+
+.left {
+	float: left;
+}
+
+.stats h4 {
+	margin: .05em;
+}
+
+.right .bar, .right .progress {
+	margin: 0.1em;
 }
