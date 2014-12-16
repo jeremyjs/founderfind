@@ -8,10 +8,10 @@ if (Meteor.isClient) {
   allSkills = [];
 
   // addPerson = function (profile) {
-     
+
   // };
 
-  Template.hello.events({
+  Template.profile.events({
 
     'click input' : function () {
       // template data, if any, is available in 'this'
@@ -29,7 +29,7 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.hello.helpers({
+  Template.profile.helpers({
     skills: function(){
       return Skills.find();
     }

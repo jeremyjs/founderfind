@@ -76,7 +76,7 @@
 		  profilesDiv.innerHTML = '<p>Error fetching profiles</p>';
 		  console.log(error);
 		}
-		
+
 		function hackerScore(profile){
 	      // console.log(allSkills);
 	      hackerScore = 0;
@@ -97,9 +97,9 @@
 	          hustlerScore = hustlerScore + 1;
 	        }
 	      }
-	      hackerScore = (allSkills.length - hackerScore)*100/12;
-	      hipsterScore = (allSkills.length - hipsterScore)*100/12;
-	      hustlerScore = (allSkills.length - hustlerScore)*100/12;
+	      hackerScore = (allSkills.length - hackerScore)*100/10;
+	      hipsterScore = (allSkills.length - hipsterScore)*100/10;
+	      hustlerScore = (allSkills.length - hustlerScore)*100/10;
 
 	      //New Code Here
 	      // People.remove({memberId: profile.id});
@@ -114,7 +114,7 @@
 	      	pictureUrl: profile.pictureUrl
 	      }
 	      People.insert(p);
-      
+
 	      // People.insert(profile);
 
 	      //document.getElementById('hackerScore').innerHTML = hackerScore;
@@ -129,12 +129,12 @@
 
 <body>
 	<div class="container">
-		{{> hello}}
+		{{> profile}}
 		{{> people}}
 	</div>
 </body>
 
-<template name="hello">
+<template name="profile">
 <header>
 	<h1>FounderFind</h1>
 	</header>
@@ -144,7 +144,7 @@
 			<div class='stats'>
 				<h2>Hacker Score</h2>
 				<div id="hackerScore">
-					
+
 					<div class="progress progress-info progress-striped active">
 	  					<div class="bar" style="width: 0%">
 	  					</div>
@@ -153,7 +153,7 @@
 				</div>
 				<h2>Hipster Score</h2>
 				<div id="hipsterScore">
-					
+
 						<div class="progress progress-warning progress-striped active">
 							<div class="bar" style="width: 0%">
 	  						</div>
@@ -162,7 +162,7 @@
 				</div>
 				<h2>Hustler Score</h2>
 				<div id="hustlerScore">
-					
+
 					<div class="progress progress-success progress-striped active">
 	  					<div class="bar" style="width: 0%">
 	  					</div>
@@ -183,7 +183,7 @@
 				<?js= firstName ?> <?js= lastName ?> is logged in to FounderFind.
 			</script>
 		</div>
-		
+
 	</div>
 </template>
 
@@ -200,7 +200,7 @@
 					<div class='stats'>
 						<h4>Hacker Score</h4>
 						<div id="hackerScore">
-							
+
 							<div class="progress progress-info progress-striped active">
 			  					<div class="bar" style="width: {{hackerScore}}%">
 			  					</div>
@@ -209,7 +209,7 @@
 						</div>
 						<h4>Hipster Score</h4>
 						<div id="hipsterScore">
-							
+
 								<div class="progress progress-warning progress-striped active">
 									<div class="bar" style="width: {{hipsterScore}}%">
 			  						</div>
@@ -218,7 +218,7 @@
 						</div>
 						<h4>Hustler Score</h4>
 						<div id="hustlerScore">
-							
+
 							<div class="progress progress-success progress-striped active">
 			  					<div class="bar" style="width: {{hustlerScore}}%">
 			  					</div>
